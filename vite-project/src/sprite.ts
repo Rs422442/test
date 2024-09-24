@@ -3,8 +3,11 @@ import { Game } from './Game';
 
 
 export class DvDSprite extends PIXI.Container{
-    vect: number[] = [];
-    speed:number = 3;
+    vect: Record<string,number> = {
+        x:Math.random(),
+        y:Math.random()
+    }; // не использовать массивы, заменить на объекты
+    speed:number = 5;
     sprite!: PIXI.Sprite;
 
     constructor(xCor:number, yCor:number){
@@ -12,7 +15,6 @@ export class DvDSprite extends PIXI.Container{
         this.spawnSprite(this);
         this.x = xCor;
         this.y = yCor;
-        this.vect = [Math.random()*200 - this.x, Math.random()*100 - this.y]
     };
 
     spawnSprite(container: PIXI.Container){
@@ -43,42 +45,38 @@ export class DvDSprite extends PIXI.Container{
         return this.sprite;
     };
 
-    spriteMoving(xCor:number, yCor:number){
-            xCor += this.speed*this.oneVect(this.vect[0]);
+    update(dt:number){
+            this.x += this.speed*this.oneVect(this.vect.x)*dt;
             
-            yCor += this.speed*this.oneVect(this.vect[1]);
+            this.y += this.speed*this.oneVect(this.vect.y)*dt;
 
-            
-
-            if (xCor + this.width/2>= window.innerWidth) {
-                this.vect[0] *= -1;
+            if (this.x + this.width/2>= Game.width) {
+                this.vect.x *= -1;
                 this.sprite.tint = this.getRandomColor();
             };
 
-            if (xCor - this.width/2 <= 0) {
-                this.vect[0] *= -1;
+            if (this.x - this.width/2 <= 0) {
+                this.vect.x *= -1;
                 this.sprite.tint = this.getRandomColor();
             };
 
-            if (yCor + this.height/2 >= window.innerHeight) {
-                this.vect[1] *= -1;
+            if (this.y+ this.height/2 >= Game.height) {
+                this.vect.y *= -1;
                 this.sprite.tint = this.getRandomColor();
             };            
 
-            if (yCor - this.height/2 <= 0) {
-                this.vect[1] *= -1;
+            if (this.y - this.height/2 <= 0) {
+                this.vect.y *= -1;
                 this.sprite.tint = this.getRandomColor();
             };
-
-        return [xCor,yCor]
     }
 
-    oneVect(vectEnd:number): number {
-        return (vectEnd)/this.vectsize(this.vect)
+    oneVect(vect:number): number {
+        return (vect)/this.vectsize(this.vect.x, this.vect.y)
     };
 
-    vectsize(vect: number[]): number {
-        return ((vect[0])**2 + (vect[1])**2)**(1/2)
+    vectsize(x: number, y:number): number {
+        return ((x)**2 + (y)**2)**(1/2)
     };
 
     getRandomColor():number {

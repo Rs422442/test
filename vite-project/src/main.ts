@@ -1,17 +1,14 @@
 import * as PIXI from 'pixi.js';
 import { Game } from './Game';
 
-document.addEventListener('DOMContentLoaded', () =>
-  {
-    const pixiapp = new PIXI.Application(
-      {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        resizeTo: window,
-        backgroundColor: 0xFFFFFF
-      });
+  const pixiApp = new PIXI.Application(
+    {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      resizeTo: window,
+      backgroundColor: 0xFFFFFF
+    });
 
-      document.body.appendChild(pixiapp.view);
+    document.body.appendChild(pixiApp.view);
 
-      new Game(pixiapp); 
-  });
+    new Game(pixiApp); 
