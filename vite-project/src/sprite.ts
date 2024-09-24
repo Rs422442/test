@@ -4,7 +4,8 @@ import { Game } from './Game';
 
 export class DvDSprite extends PIXI.Container{
     vect: number[] = [];
-    speed:number = 1;
+    speed:number = 3;
+    sprite!: PIXI.Sprite;
 
     constructor(xCor:number, yCor:number){
         super();
@@ -26,20 +27,20 @@ export class DvDSprite extends PIXI.Container{
         posY:number = 0,
         anchorX:number = 0.5,
         anchorY:number = 0.5,
-        scaleX:number = 1,
-        scaleY:number = 1,
+        scaleX:number = 2,
+        scaleY:number = 2,
     ): PIXI.Sprite {
 
-        const sprite = new PIXI.Sprite(image);
+        this.sprite = new PIXI.Sprite(image);
 
-        sprite.anchor.x = anchorX;
-        sprite.anchor.y = anchorY;
-        sprite.scale.x = scaleX;
-        sprite.scale.y = scaleY;
-        sprite.x = posX;
-        sprite.y = posY;
+        this.sprite.anchor.x = anchorX;
+        this.sprite.anchor.y = anchorY;
+        this.sprite.scale.x = scaleX;
+        this.sprite.scale.y = scaleY;
+        this.sprite.x = posX;
+        this.sprite.y = posY;
 
-        return sprite;
+        return this.sprite;
     };
 
     spriteMoving(xCor:number, yCor:number){
@@ -47,21 +48,28 @@ export class DvDSprite extends PIXI.Container{
             
             yCor += this.speed*this.oneVect(this.vect[1]);
 
+            
+
             if (xCor + this.width/2>= window.innerWidth) {
                 this.vect[0] *= -1;
+                this.sprite.tint = this.getRandomColor();
             };
 
             if (xCor - this.width/2 <= 0) {
                 this.vect[0] *= -1;
+                this.sprite.tint = this.getRandomColor();
             };
 
             if (yCor + this.height/2 >= window.innerHeight) {
                 this.vect[1] *= -1;
+                this.sprite.tint = this.getRandomColor();
             };            
 
             if (yCor - this.height/2 <= 0) {
                 this.vect[1] *= -1;
+                this.sprite.tint = this.getRandomColor();
             };
+
         return [xCor,yCor]
     }
 
@@ -72,4 +80,13 @@ export class DvDSprite extends PIXI.Container{
     vectsize(vect: number[]): number {
         return ((vect[0])**2 + (vect[1])**2)**(1/2)
     };
+
+    getRandomColor():number {
+        const letters:string = '0123456789ABCDEF';
+        let color:string = '0x';
+        for (let i:number = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return +color;
+    }
 };
